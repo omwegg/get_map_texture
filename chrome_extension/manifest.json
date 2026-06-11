@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "地図タイル取得ツール",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Google Maps上で範囲を選択して地理院・ESRI・Mapbox・Google衛星画像のタイルをダウンロード",
   "content_scripts": [
     {

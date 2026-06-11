@@ -22,7 +22,7 @@ Google Maps 上で直接範囲を選択してタイル画像をダウンロー�
 
 ### インストール
 
-1. [Releases ページ](https://github.com/omwegg/get_map_texture/releases/latest) から `tile-downloader-chrome-v2.0.0.zip` をダウンロード
+1. [Releases ページ](https://github.com/omwegg/get_map_texture/releases/latest) から `tile-downloader-chrome.zip` をダウンロード
 2. ZIP を解凍する
 3. Chrome で `chrome://extensions` を開く
 4. 右上の「**デベロッパー モード**」を **ON** にする
