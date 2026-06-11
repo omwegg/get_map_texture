@@ -10,6 +10,7 @@
     // ── 高解像度衛星画像 ──
     {
       label: "Mapbox 衛星画像（トークン必要）",
+      fileId: "mapbox_satellite",
       group: "高解像度衛星画像",
       maxZoom: 22,
       needsToken: true,
@@ -20,6 +21,7 @@
     },
     {
       label: "ESRI 衛星画像（高解像度）",
+      fileId: "esri_satellite",
       group: "高解像度衛星画像",
       maxZoom: 19,
       getUrl: (z, x, y) =>
@@ -27,6 +29,7 @@
     },
     {
       label: "Google 衛星画像 ⚠️",
+      fileId: "google_satellite",
       group: "高解像度衛星画像",
       maxZoom: 21,
       warnGoogle: true,
@@ -36,6 +39,7 @@
     // ── 地理院タイル ──
     {
       label: "空中写真（シームレス）",
+      fileId: "gsi_photo",
       group: "地理院タイル",
       maxZoom: 18,
       getUrl: (z, x, y) =>
@@ -43,6 +47,7 @@
     },
     {
       label: "標準地図",
+      fileId: "gsi_std",
       group: "地理院タイル",
       maxZoom: 18,
       getUrl: (z, x, y) =>
@@ -50,6 +55,7 @@
     },
     {
       label: "淡色地図",
+      fileId: "gsi_pale",
       group: "地理院タイル",
       maxZoom: 18,
       getUrl: (z, x, y) =>
@@ -57,6 +63,7 @@
     },
     {
       label: "白地図",
+      fileId: "gsi_blank",
       group: "地理院タイル",
       maxZoom: 14,
       getUrl: (z, x, y) =>
@@ -64,6 +71,7 @@
     },
     {
       label: "色別標高図",
+      fileId: "gsi_relief",
       group: "地理院タイル",
       maxZoom: 15,
       getUrl: (z, x, y) =>
@@ -626,9 +634,8 @@
       }
     }
 
-    // ファイル名を生成
-    const srcLabel = source.label.replace(/[（）\(\)\s]/g, "_");
-    const filename = `${srcLabel}_z${zoom}_${range.xMin}_${range.yMin}_${range.cx}x${range.cy}.jpg`;
+    // ファイル名を生成（ASCII のみ）
+    const filename = `${source.fileId}_z${zoom}_${range.xMin}_${range.yMin}_${range.cx}x${range.cy}.jpg`;
 
     canvas.toBlob(
       (blob) => {
