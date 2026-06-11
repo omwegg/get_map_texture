@@ -262,6 +262,13 @@
         <button id="gsi-download" class="gsi-btn gsi-btn-download" disabled>
           ダウンロード
         </button>
+
+        <div id="gsi-license-note">
+          ⚠ 地理院タイル以外は利用規約に制約があります。
+          取得した画像の利用は自己責任で行ってください。
+          <a href="https://github.com/omwegg/get_map_texture#利用規約商用利用について"
+             target="_blank">詳細</a>
+        </div>
       </div>
     `;
     document.body.appendChild(panel);

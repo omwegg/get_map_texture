@@ -111,11 +111,42 @@ python get_map_texture.py
 - ズームレベル 18 でタイル1辺 ≈ 約125m（北緯35度）
 - PLATEAU の 3 次メッシュは地理院タイルのズームレベル 15 に対応
 
-## ライセンス
+## 利用規約・商用利用について
 
-- 地理院タイル: [国土地理院の利用規約](https://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html)
-- ESRI World Imagery: [Esri の利用規約](https://www.esri.com/en-us/legal/terms/full-master-agreement)
-- Google 衛星画像: [Google Maps Platform 利用規約](https://cloud.google.com/maps-platform/terms)
+> **重要**: 各タイルソースにはそれぞれ固有の利用規約があります。  
+> 取得した画像を利用する前に、必ず該当する規約を確認してください。
+
+### 地理院タイル — ✅ 商用利用可
+
+- **ライセンス**: [政府標準利用規約（第2.0版）](https://www.gsi.go.jp/kikakuchousei/kikakuchousei40182.html)
+- **商用利用**: **可能**（出典の記載が必要）
+- **出典表記**: `出典：国土地理院ウェブサイト（https://maps.gsi.go.jp/）`
+- **APIキー**: 不要
+- **一括ダウンロード**: 常識的な範囲で可能
+
+### ESRI World Imagery — ⚠️ 条件付き（注意が必要）
+
+- **ライセンス**: [Esri Master License Agreement](https://www.esri.com/en-us/legal/terms/full-master-agreement)
+- **商用利用**: **デフォルトでは非商用のみ**（商用利用には Esri との別途有償ライセンス契約が必要）
+- **一括ダウンロード**: **明示的に禁止**（規約違反 = material breach）
+- **注意**: 本ツールでの利用方法（タイルの一括取得・結合）は規約上グレーゾーンです
+
+### Google 衛星画像 — ❌ 利用規約上の制約あり
+
+- **ライセンス**: [Google Maps Platform 利用規約](https://cloud.google.com/maps-platform/terms)
+- **商用利用**: 正規 API（Maps Platform）の利用が必要（APIキー・課金設定が必須）
+- **直接タイル取得**: **規約で禁止**（pre-fetching・キャッシュ・スクレイピングすべて不可）
+- **注意**: 本ツールでの利用方法は Google の利用規約に抵触する可能性があります
+
+### まとめ
+
+| 用途 | 推奨ソース |
+|---|---|
+| 商用利用 | 地理院タイル（日本国内） |
+| 個人利用・学習・研究 | 地理院タイル / ESRI（非商用） |
+| 海外の高解像度（正規利用） | [Google Maps Platform API](https://developers.google.com/maps) を別途契約 |
+
+**本ツールはあくまで技術的なユーティリティです。取得した画像の利用は各自の責任で行ってください。**
 
 ## Ref
 
