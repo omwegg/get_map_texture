@@ -485,6 +485,8 @@
       drawRect();
       endSelection();
       updateTileInfo();
+      // 短時間表示してから自動でクリア
+      setTimeout(clearVisuals, 1500);
     }
   }
 
