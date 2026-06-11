@@ -576,18 +576,6 @@
       return;
     }
 
-    // Google 衛星画像の確認
-    if (source.warnGoogle) {
-      if (!confirm(
-        "⚠️ Google 衛星画像の直接取得は Google の利用規約で禁止されています。\n\n" +
-        "個人の学習・検証目的に限定して利用してください。\n" +
-        "商用利用は Mapbox 衛星画像をおすすめします。\n\n" +
-        "続行しますか？"
-      )) {
-        return;
-      }
-    }
-
     // 選択表示をクリア（座標はパネルに残る）
     clearVisuals();
 
