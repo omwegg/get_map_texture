@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(gh *)",
+      "Bash(python -c *)",
+      "Bash(python get_map_texture.py)",
+      "Bash(python get_map_texture_gui.py)",
+      "Bash(ls *)",
+      "Bash(rm *.zip)"
+    ]
+  }
+}

@@ -3,4 +3,5 @@ export/
 *.log
 __pycache__/
 *.pyc
-.claude/
+# Claude Code（共有設定は追跡、ローカル設定は除外）
+.claude/settings.local.json
