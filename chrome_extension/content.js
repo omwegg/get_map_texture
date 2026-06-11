@@ -505,6 +505,9 @@
     const zoom = parseInt($("gsi-zoom").value);
     const source = TILE_SOURCES[parseInt($("gsi-type").value)];
 
+    // 選択表示をクリア（座標はパネルに残る）
+    clearVisuals();
+
     // UI ロック
     downloading = true;
     $("gsi-download").disabled = true;
