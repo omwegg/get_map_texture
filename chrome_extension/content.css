@@ -175,6 +175,54 @@
   margin-top: 4px;
 }
 
+/* ── Mapbox トークン入力 ───────────────────────────── */
+
+#gsi-mapbox-token-area {
+  margin-top: 2px;
+}
+
+#gsi-mapbox-token {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: monospace;
+  background: #fff;
+  box-sizing: border-box;
+}
+#gsi-mapbox-token:focus {
+  border-color: #1a73e8;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.15);
+}
+
+.gsi-token-hint {
+  font-size: 10px;
+  color: #888;
+  margin-top: 2px;
+}
+.gsi-token-hint a {
+  color: #1a73e8;
+  text-decoration: underline;
+}
+
+/* ── Google 衛星画像の警告 ─────────────────────────── */
+
+#gsi-google-warn {
+  padding: 6px 8px;
+  background: #fef2f2;
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #991b1b;
+}
+#gsi-google-warn a {
+  color: #1a73e8;
+  text-decoration: underline;
+}
+
 /* ── 利用規約の注意書き ────────────────────────────── */
 
 #gsi-license-note {

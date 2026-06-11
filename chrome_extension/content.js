@@ -9,6 +9,16 @@
   const TILE_SOURCES = [
     // ── 高解像度衛星画像 ──
     {
+      label: "Mapbox 衛星画像（トークン必要）",
+      group: "高解像度衛星画像",
+      maxZoom: 22,
+      needsToken: true,
+      getUrl: (z, x, y) => {
+        const token = getMapboxToken();
+        return `https://api.mapbox.com/v4/mapbox.satellite/${z}/${x}/${y}.jpg90?access_token=${token}`;
+      },
+    },
+    {
       label: "ESRI 衛星画像（高解像度）",
       group: "高解像度衛星画像",
       maxZoom: 19,
@@ -16,9 +26,10 @@
         `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}`,
     },
     {
-      label: "Google 衛星画像",
+      label: "Google 衛星画像 ⚠️",
       group: "高解像度衛星画像",
       maxZoom: 21,
+      warnGoogle: true,
       getUrl: (z, x, y) =>
         `https://mt${(x + y) % 4}.google.com/vt/lyrs=s&x=${x}&y=${y}&z=${z}`,
     },
@@ -59,6 +70,18 @@
         `https://cyberjapandata.gsi.go.jp/xyz/relief/${z}/${x}/${y}.png`,
     },
   ];
+
+  // ── Mapbox トークン管理 ──────────────────────────────
+
+  const MAPBOX_TOKEN_KEY = "gsi-mapbox-token";
+
+  function getMapboxToken() {
+    return localStorage.getItem(MAPBOX_TOKEN_KEY) || "";
+  }
+
+  function saveMapboxToken(token) {
+    localStorage.setItem(MAPBOX_TOKEN_KEY, token.trim());
+  }
 
   // ── 状態 ────────────────────────────────────────────
 
@@ -241,6 +264,22 @@
         <label>画像ソース</label>
         <select id="gsi-type">${buildSourceOptions()}</select>
 
+        <div id="gsi-mapbox-token-area" style="display:${defaultSource.needsToken ? "block" : "none"}">
+          <label>Mapbox アクセストークン</label>
+          <input id="gsi-mapbox-token" type="text" placeholder="pk.xxxxx..."
+                 value="${getMapboxToken()}" spellcheck="false" />
+          <div class="gsi-token-hint">
+            <a href="https://account.mapbox.com/access-tokens/" target="_blank">トークンを取得</a>
+            （無料アカウントで発行可）
+          </div>
+        </div>
+
+        <div id="gsi-google-warn" style="display:none">
+          ⚠️ Google 衛星画像の直接取得は
+          <a href="https://cloud.google.com/maps-platform/terms" target="_blank">利用規約</a>
+          で禁止されています。個人の学習・検証目的に限定してご利用ください。
+        </div>
+
         <label>ズームレベル</label>
         <select id="gsi-zoom">${buildZoomOptions(defaultSource.maxZoom, 15)}</select>
 
@@ -280,6 +319,12 @@
     $("gsi-download").addEventListener("click", startDownload);
     $("gsi-type").addEventListener("change", onSourceChanged);
     $("gsi-zoom").addEventListener("change", updateTileInfo);
+    $("gsi-mapbox-token").addEventListener("change", (e) => {
+      saveMapboxToken(e.target.value);
+    });
+
+    // 初期表示時のソース状態を反映
+    onSourceChanged();
   }
 
   function $(id) {
@@ -306,6 +351,19 @@
     const current = parseInt(zoomEl.value) || 15;
     const clamped = Math.min(current, src.maxZoom);
     zoomEl.innerHTML = buildZoomOptions(src.maxZoom, clamped);
+
+    // Mapbox トークン入力欄の表示切替
+    const tokenArea = $("gsi-mapbox-token-area");
+    if (tokenArea) {
+      tokenArea.style.display = src.needsToken ? "block" : "none";
+    }
+
+    // Google 衛星画像の警告表示
+    const googleWarn = $("gsi-google-warn");
+    if (googleWarn) {
+      googleWarn.style.display = src.warnGoogle ? "block" : "none";
+    }
+
     updateTileInfo();
   }
 
@@ -511,6 +569,24 @@
 
     const zoom = parseInt($("gsi-zoom").value);
     const source = TILE_SOURCES[parseInt($("gsi-type").value)];
+
+    // Mapbox トークンの確認
+    if (source.needsToken && !getMapboxToken()) {
+      alert("Mapbox アクセストークンを入力してください。\n\nhttps://account.mapbox.com/access-tokens/ で無料取得できます。");
+      return;
+    }
+
+    // Google 衛星画像の確認
+    if (source.warnGoogle) {
+      if (!confirm(
+        "⚠️ Google 衛星画像の直接取得は Google の利用規約で禁止されています。\n\n" +
+        "個人の学習・検証目的に限定して利用してください。\n" +
+        "商用利用は Mapbox 衛星画像をおすすめします。\n\n" +
+        "続行しますか？"
+      )) {
+        return;
+      }
+    }
 
     // 選択表示をクリア（座標はパネルに残る）
     clearVisuals();

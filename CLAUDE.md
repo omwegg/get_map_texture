@@ -4,7 +4,7 @@
 
 ## プロジェクト概要
 
-地図タイルを複数のソース（地理院・ESRI・Google）から取得し、1枚の画像に合成して保存するツール。CLI / GUI / Chrome 拡張の3形態があり、すべて同じコア処理（バウンディングボックス → タイル座標変換 → 256×256 タイルのグリッドダウンロード → キャンバスへの合成）を共有している。
+地図タイルを複数のソース（地理院・ESRI・Mapbox・Google）から取得し、1枚の画像に合成して保存するツール。CLI / GUI / Chrome 拡張の3形態があり、すべて同じコア処理（バウンディングボックス → タイル座標変換 → 256×256 タイルのグリッドダウンロード → キャンバスへの合成）を共有している。
 
 ## 実行方法
 
@@ -38,12 +38,13 @@ python get_map_texture_gui.py
 ソースごとにパラメータの順序が異なるので注意：
 - **地理院 (GSI)**: `/{z}/{x}/{y}.{ext}` — 標準 XYZ
 - **ESRI**: `/tile/{z}/{y}/{x}` — **Y が X の前**、拡張子なし
+- **Mapbox**: `/v4/mapbox.satellite/{z}/{x}/{y}.jpg90?access_token=TOKEN` — 標準 XYZ、アクセストークン必須
 - **Google**: `?x={x}&y={y}&z={z}` — クエリパラメータ、`mt0`〜`mt3` に負荷分散
 
 ### Chrome 拡張 (`chrome_extension/`)
 
 Manifest V3。4ファイル構成：
-- **content.js** — Google Maps ページに注入。UI（フローティングパネル・オーバーレイ・マーカー・矩形）、座標変換、キャンバス結合をすべて含むメインファイル（約600行）。
+- **content.js** — Google Maps ページに注入。UI（フローティングパネル・オーバーレイ・マーカー・矩形）、座標変換、キャンバス結合をすべて含むメインファイル（約700行）。Mapbox トークンは `localStorage` に保存。Google 衛星画像選択時は規約警告を表示。
 - **content.css** — パネルとオーバーレイのスタイル。Google Maps との競合を避けるため全セレクタに `gsi-` プレフィックス。
 - **background.js** — 最小限のサービスワーカー。唯一の役割は CORS 回避のためのタイル取得プロキシ。content script が `{action: "fetchTile", url}` を送り、background が fetch して data URL を返す。
 - **manifest.json** — `host_permissions` にすべてのタイルソースドメインを含める必要がある。
