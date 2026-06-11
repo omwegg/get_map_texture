@@ -323,7 +323,7 @@
     makeDraggable(panel, panel.querySelector(".gsi-header"));
 
     $("gsi-minimize").addEventListener("click", togglePanel);
-    $("gsi-select").addEventListener("click", startSelection);
+    $("gsi-select").addEventListener("click", onSelectButtonClick);
     $("gsi-download").addEventListener("click", startDownload);
     $("gsi-type").addEventListener("change", onSourceChanged);
     $("gsi-zoom").addEventListener("change", updateTileInfo);
@@ -412,17 +412,28 @@
 
   // ── 範囲選択モード ──────────────────────────────────
 
-  function startSelection() {
-    if (selecting || downloading) return;
+  function onSelectButtonClick() {
+    if (downloading) return;
 
+    // 選択中 → キャンセル
+    if (selecting) {
+      cancelSelection();
+      return;
+    }
+
+    // ハイライト表示中 → クリアして再選択
+    clearVisuals();
+    startSelection();
+  }
+
+  function startSelection() {
     selecting = true;
     clickCount = 0;
     topLeft = null;
     bottomRight = null;
-    clearVisuals();
 
     const btn = $("gsi-select");
-    btn.textContent = "🎯 左上をクリック...";
+    btn.textContent = "🎯 左上をクリック...（もう一度押すとキャンセル）";
     btn.classList.add("active");
 
     $("gsi-tl").textContent = "左上: マップ上をクリック...";
@@ -434,16 +445,18 @@
     overlay.id = "gsi-overlay";
     document.body.appendChild(overlay);
     overlay.addEventListener("click", onOverlayClick);
-    overlay.addEventListener("contextmenu", cancelSelection);
+    overlay.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      cancelSelection();
+    });
   }
 
-  function cancelSelection(e) {
-    e.preventDefault();
+  function cancelSelection() {
     endSelection();
     clearVisuals();
     $("gsi-tl").textContent = "左上: 未選択";
     $("gsi-br").textContent = "右下: 未選択";
-    $("gsi-tile-info").textContent = "右クリックでキャンセルしました";
+    $("gsi-tile-info").textContent = "キャンセルしました";
   }
 
   function endSelection() {
@@ -456,6 +469,16 @@
     btn.textContent = "📍 範囲を再選択";
     btn.classList.remove("active");
   }
+
+  // Escape キーでハイライト消去 / 選択キャンセル
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (selecting) {
+      cancelSelection();
+    } else if (markers.length > 0 || rectEl) {
+      clearVisuals();
+    }
+  });
 
   function onOverlayClick(e) {
     const ll = pixelToLatLng(e.clientX, e.clientY);
@@ -485,8 +508,6 @@
       drawRect();
       endSelection();
       updateTileInfo();
-      // 短時間表示してから自動でクリア
-      setTimeout(clearVisuals, 1500);
     }
   }
 
