@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "地理院タイル取得",
+  "version": "1.0",
+  "description": "Google Maps上で範囲を選択して国土地理院のタイルをダウンロード",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.google.com/maps/*",
+        "https://www.google.co.jp/maps/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "https://cyberjapandata.gsi.go.jp/*",
+    "https://server.arcgisonline.com/*",
+    "https://mt0.google.com/*",
+    "https://mt1.google.com/*",
+    "https://mt2.google.com/*",
+    "https://mt3.google.com/*"
+  ],
+  "icons": {}
+}
